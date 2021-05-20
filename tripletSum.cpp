@@ -8,6 +8,7 @@ using namespace std;
 vector<vector<int>> triplets(vector<int>& arr, int target) {
   vector<vector<int>> result;
   int n = arr.size();
+  
   sort(arr.begin(), arr.end());
 
   for (int i = 0; i < n - 2; i++) {
