@@ -1,24 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <unordered_set>
 
 using namespace std;
 
 int longestBand(vector<int>& arr) {
-  sort(arr.begin(), arr.end());
+  int n = arr.size();
+  unordered_set<int> s; 
+  int largestBand = 1;
 
-  int band = 1, maxBand = 0;
-  
-  for (int i = 0; i < arr.size() - 1; i++) {
-    if (arr[i + 1] - arr[i] == 1) {
-      band++;
-    } else {
-      maxBand = max(band, maxBand);
-      band = 1;
+  for (int i: arr) {
+    s.insert(i);
+  }
+
+  for (int i: arr) {
+    int parent = i - 1;
+    // if i - 1 does not exist
+    // this is start of chain
+    if (s.find(parent) == s.end()) {
+      int next = i + 1, count = 1;
+
+      while (s.find(next) != s.end()) {
+        next++;
+        count++;
+      }
+
+      largestBand = max(largestBand, count);
     }
   }
 
-  return maxBand;
+  return largestBand;
 }
 
 int main() {
