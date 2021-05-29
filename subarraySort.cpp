@@ -1,27 +1,48 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <limits.h>
 
 using namespace std;
 
-vector<int> subarraySort(vector<int> a) {
-  vector<int> b(a);
-  sort(a.begin(), a.end());
+bool outOfOrder(vector<int> arr, int i) {
+  int x = arr[i];
+  if (i == 0) {
+    return x > arr[1];
+  }
 
-  int n = a.size();
-  int i = 0, j = n - 1;
+  if (i == arr.size() - 1) {
+    return x < arr[i - 1];
+  }
 
-  while (i < n && a[i] == b[i])
-    i++;
+  return x > arr[i + 1] || x < arr[i - 1];
+}
 
-  while (j >= 0 && a[j] == b[j])
-    j--;
+vector<int> subarraySort(vector<int> arr) {
+  int smallest = INT_MAX;
+  int largest = INT_MIN;
 
-  if (i == n - 1) {
+  for (int i = 0; i < arr.size(); i++) {
+    if (outOfOrder(arr, i)) {
+      smallest = min(smallest, arr[i]);
+      largest = max(largest, arr[i]);
+    }
+  }
+
+  if (smallest == INT_MAX) {
     return {-1, -1};
   }
 
-  return {i, j};
+  int left = 0, right = arr.size() - 1;
+  while (smallest >= arr[left]) {
+    left++;
+  }
+
+  while (largest <= arr[right]) {
+    right--;
+  }
+  
+  return {left, right};
 }
 
 int main() {
